@@ -14,11 +14,6 @@ public class CastingController {
     @Autowired
     private CastingRepository castingRepository;
 
-    //Simple CRUD
-    @GetMapping("/casting/{id}")
-    public Casting getRolesById(@PathVariable String id){
-        return castingRepository.findCastingById(id);
-    }
     @PostMapping("/casting")
     public Casting addCasting(@RequestBody Casting casting){
         castingRepository.save(casting);
@@ -45,7 +40,7 @@ public class CastingController {
         }
         return ResponseEntity.notFound().build();
     }
-    //other gets
+    //gets
     @GetMapping("/casting/movie/{movieId}")
     public List<Casting> getCastingsByMovie(@PathVariable Integer movieId){
         return castingRepository.findCastingByMovieId(movieId);

@@ -11,9 +11,9 @@ public class RoleController {
     @Autowired
     private RoleRepository roleRepository;
 
-     @GetMapping("/role/{id}")
-     public Role getRolesById(@PathVariable String id){
-         return roleRepository.findRoleById(id);
+     @GetMapping("/role/{name}")
+     public Role getRolesByName(@PathVariable String name){
+         return roleRepository.findRoleByName(name);
      }
      @PostMapping("/role")
      public Role addRole(@RequestBody Role role){

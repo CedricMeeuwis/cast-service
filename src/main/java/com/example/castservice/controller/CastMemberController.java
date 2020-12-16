@@ -25,11 +25,6 @@ public class CastMemberController {
     public List<CastMember> getCastMembersByNationality(@PathVariable String nationality){
         return castMemberRepository.findCastMemberByNationality(nationality);
     }
-    //Simple CRUD
-    @GetMapping("castmember/{id}")
-    public CastMember getCastMemberById(@PathVariable String id){
-        return castMemberRepository.findCastMemberById(id);
-    }
     @PostMapping("/castmember")
     public CastMember addCastMember(@RequestBody CastMember castMember){
         castMemberRepository.save(castMember);
