@@ -1,0 +1,135 @@
+package com.example.castservice.unit;
+
+import com.example.castservice.model.Casting;
+import com.example.castservice.repository.CastingRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class CastingControllerUnitTests {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private CastingRepository castingRepository;
+
+    private ObjectMapper mapper = new ObjectMapper();
+
+    @Test
+    public void givenCasting_whenGetCastingsByMovieId_thenReturnJsonCastings() throws Exception {
+        Casting casting1 = new Casting("1", 1, 1, new Date("10/10/2019"), new Date("10/10/2020"));
+        Casting casting2 = new Casting("2", 2, 1, new Date("10/10/2019"), new Date("08/11/2020"));
+
+        List<Casting> castingList = new ArrayList<>();
+        castingList.add(casting1);
+        castingList.add(casting2);
+
+        given(castingRepository.findCastingByMovieId(1)).willReturn(castingList);
+
+        mockMvc.perform(get("/casting/movie/{movieId}",1))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].castMemberId",is(1)))
+                .andExpect(jsonPath("$[0].startDate",is(new Date("10/10/2019"))))
+                .andExpect(jsonPath("$[0].endDate",is(new Date("10/10/2020"))))
+                .andExpect(jsonPath("$[1].castMemberId",is(1)))
+                .andExpect(jsonPath("$[1].startDate",is(new Date("10/10/2019"))))
+                .andExpect(jsonPath("$[1].endDate",is(new Date("10/10/2020"))));
+    }
+
+    @Test
+    public void givenCasting_whenGetCastingsByCastMemberId_thenReturnJsonCastings() throws Exception {
+        Casting casting1 = new Casting("1", 1, 1, new Date("10/10/2019"), new Date("10/10/2020"));
+        Casting casting2 = new Casting("2", 1, 2, new Date("11/10/2020"), new Date("12/12/2020"));
+
+        List<Casting> castingList = new ArrayList<>();
+        castingList.add(casting1);
+        castingList.add(casting2);
+
+        given(castingRepository.findCastingByMovieId(1)).willReturn(castingList);
+
+        mockMvc.perform(get("/casting/castmember/{castMemberId}",1))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].movieId",is(1)))
+                .andExpect(jsonPath("$[0].startDate",is(new Date("10/10/2019"))))
+                .andExpect(jsonPath("$[0].endDate",is(new Date("10/10/2020"))))
+                .andExpect(jsonPath("$[1].movieId",is(1)))
+                .andExpect(jsonPath("$[1].startDate",is(new Date("11/10/2020"))))
+                .andExpect(jsonPath("$[1].endDate",is(new Date("12/12/2020"))));
+    }
+
+    @Test
+    public void whenPostCasting_thenReturnJsonCasting() throws Exception{
+        Casting casting3 = new Casting("3", 2, 3, new Date("10/10/2019"), new Date("10/10/2020"));
+
+        mockMvc.perform(post("/casting")
+                .content(mapper.writeValueAsString(casting3))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.castMemberId",is(2)))
+                .andExpect(jsonPath("$.movieId",is(3)))
+                .andExpect(jsonPath("$.startDate",is(new Date("10/10/2019"))))
+                .andExpect(jsonPath("$.endDate",is(new Date("10/10/2020"))));
+    }
+
+    @Test
+    public void givenCasting_whenPutCasting_thenReturnJsonCasting() throws Exception{
+        Casting casting1 = new Casting("1", 1, 1, new Date("10/10/2019"), new Date("10/10/2020"));
+
+        given(castingRepository.findCastingById("1")).willReturn(casting1);
+
+        Casting updatedCasting = new Casting("1", 1, 4, new Date("10/10/2018"), new Date("10/10/2019"));
+
+        mockMvc.perform(put("/castings")
+                .content(mapper.writeValueAsString(updatedCasting))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.castMemberId",is(1)))
+                .andExpect(jsonPath("$.movieId",is(4)))
+                .andExpect(jsonPath("$.startDate",is(new Date("10/10/2018"))))
+                .andExpect(jsonPath("$.endDate",is(new Date("10/10/2019"))));
+    }
+
+    @Test
+    public void givenCasting_whenDeleteCasting_thenStatusOk() throws Exception{
+        Casting castingToBeDeleted = new Casting("999",9,9, new Date("01/01/0001"), new Date("02/02/0002"));
+
+        given(castingRepository.findCastingById("999")).willReturn(castingToBeDeleted);
+
+        mockMvc.perform(delete("/casting/{id}","999")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenNoCasting_whenDeleteCasting_thenStatusNotFound() throws Exception{
+        given(castingRepository.findCastingById("888")).willReturn(null);
+
+        mockMvc.perform(delete("/casting/{id}","888")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+}

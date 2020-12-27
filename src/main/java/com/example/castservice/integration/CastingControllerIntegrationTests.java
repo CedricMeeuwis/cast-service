@@ -1,4 +1,4 @@
-package com.example.castservice;
+package com.example.castservice.integration;
 
 import com.example.castservice.model.Casting;
 import com.example.castservice.repository.CastingRepository;
