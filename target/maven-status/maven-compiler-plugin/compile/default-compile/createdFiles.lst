@@ -1,0 +1,6 @@
+com\example\castservice\integration\RoleControllerIntegrationTests.class
+com\example\castservice\unit\CastingControllerUnitTests.class
+com\example\castservice\integration\CastMemberControllerIntegrationTests.class
+com\example\castservice\unit\RoleControllerUnitTests.class
+com\example\castservice\integration\CastingControllerIntegrationTests.class
+com\example\castservice\unit\CastMemberControllerUnitTests.class
