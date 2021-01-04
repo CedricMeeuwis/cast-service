@@ -11,13 +11,13 @@ public class Casting {
     private String id;
     private Integer castMemberId;
     private Integer movieId;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
 
     public Casting() {
     }
 
-    public Casting(String id, Integer castMemberId, Integer movieId, Date startDate, Date endDate) {
+    public Casting(String id, Integer castMemberId, Integer movieId, String startDate, String endDate) {
         this.id = id;
         this.castMemberId = castMemberId;
         this.movieId = movieId;
@@ -49,19 +49,19 @@ public class Casting {
         this.movieId = movieId;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 }

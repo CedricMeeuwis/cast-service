@@ -29,10 +29,10 @@ public class CastMemberControllerIntegrationTests {
     @Autowired
     private CastMemberRepository reviewRepository;
 
-    private CastMember castMember1 = new CastMember("001", "Leonarda Dicaprio", new Date("11/11/1974"), "American", 2);
-    private CastMember castMember2 = new CastMember("002", "Ryan Gosling", new Date("12/11/1980"), "Canadian", 2);
-    private CastMember castMember3 = new CastMember("003", "Denis Villeneuve", new Date("03/10/1967"), "Canadian", 1);
-    private CastMember castMemberToDelete = new CastMember("004", "Johny Johnson", new Date("01/01/1968"), "Alien", 3);
+    private CastMember castMember1 = new CastMember("001", "Leonarda Dicaprio", ("11/11/1974"), "American", 2);
+    private CastMember castMember2 = new CastMember("002", "Ryan Gosling", ("12/11/1980"), "Canadian", 2);
+    private CastMember castMember3 = new CastMember("003", "Denis Villeneuve", ("03/10/1967"), "Canadian", 1);
+    private CastMember castMemberToDelete = new CastMember("004", "Johny Johnson", ("01/01/1968"), "Alien", 3);
 
     @BeforeEach
     public void beforeAllTests() {
@@ -63,10 +63,10 @@ public class CastMemberControllerIntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is("Leonarda Dicaprio")))
-                .andExpect(jsonPath("$[0].birthDate", is(new Date("11/11/1974"))))
+                .andExpect(jsonPath("$[0].birthDate", is(("11/11/1974"))))
                 .andExpect(jsonPath("$[0].nationality", is("American")))
                 .andExpect(jsonPath("$[1].name", is("Ryan Gosling")))
-                .andExpect(jsonPath("$[1].birthDate", is(new Date("12/11/1980"))))
+                .andExpect(jsonPath("$[1].birthDate", is(("12/11/1980"))))
                 .andExpect(jsonPath("$[1].nationality", is("Canadian")));
     }
 
@@ -77,32 +77,32 @@ public class CastMemberControllerIntegrationTests {
         castMemberList.add(castMember2);
         castMemberList.add(castMember3);
 
-        mockMvc.perform(get("/castmember/nationality/{nationality}", 2))
+        mockMvc.perform(get("/castmember/nationality/{nationality}", "Canadian"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is("Ryan Gosling")))
-                .andExpect(jsonPath("$[0].birthDate", is(new Date("12/11/1980"))))
+                .andExpect(jsonPath("$[0].birthDate", is(("12/11/1980"))))
                 .andExpect(jsonPath("$[0].roleId", is(2)))
                 .andExpect(jsonPath("$[1].name", is("Denis Villeneuve")))
-                .andExpect(jsonPath("$[1].birthDate", is(new Date("03/10/1967"))))
+                .andExpect(jsonPath("$[1].birthDate", is(("03/10/1967"))))
                 .andExpect(jsonPath("$[1].roleId", is(1)));
     }
 
     @Test
     public void givenCastMember_whenGetCastMemberByName_thenReturnJsonCastMember() throws Exception {
 
-        mockMvc.perform(get("/castmember/name/{name}", "Leonardo Dicaprio"))
+        mockMvc.perform(get("/castmember/name/{name}", "Leonarda Dicaprio"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.birthDate", is(new Date("11/11/1974"))))
+                .andExpect(jsonPath("$.birthDate", is(("11/11/1974"))))
                 .andExpect(jsonPath("$.nationality", is("American")))
                 .andExpect(jsonPath("$.roleId", is(2)));
     }
 
     @Test
     public void whenPostCastMember_thenReturnJsonCastMember() throws Exception {
-        CastMember reviewUser3Book1 = new CastMember("005", "Amy Adams", new Date("20/08/1974"),"American", 2);
+        CastMember reviewUser3Book1 = new CastMember("005", "Amy Adams", ("20/08/1974"),"American", 2);
 
         mockMvc.perform(post("/castmember")
                 .content(mapper.writeValueAsString(reviewUser3Book1))
@@ -110,7 +110,7 @@ public class CastMemberControllerIntegrationTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Amy Adams")))
-                .andExpect(jsonPath("$.birthDate", is(new Date("20/08/1974"))))
+                .andExpect(jsonPath("$.birthDate", is(("20/08/1974"))))
                 .andExpect(jsonPath("$.nationality", is("American")))
                 .andExpect(jsonPath("$.roleId", is(2)));
     }
@@ -118,15 +118,15 @@ public class CastMemberControllerIntegrationTests {
     @Test
     public void givenCastMember_whenPutCastMember_thenReturnJsonCastMember() throws Exception {
 
-        CastMember updatedCastMember = new CastMember("001", "Leonardo Dicaprio", new Date("11/11/1975"), "American!", 2);
+        CastMember updatedCastMember = new CastMember("001", "Leonardo Dicaprio", ("11/11/1975"), "American!", 2);
 
-        mockMvc.perform(put("/reviews")
+        mockMvc.perform(put("/castmember")
                 .content(mapper.writeValueAsString(updatedCastMember))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Leonardo Dicaprio")))
-                .andExpect(jsonPath("$.birthDate", is(new Date("11/11/1975"))))
+                .andExpect(jsonPath("$.birthDate", is(("11/11/1975"))))
                 .andExpect(jsonPath("$.nationality", is("American!")))
                 .andExpect(jsonPath("$.roleId", is(2)));
     }

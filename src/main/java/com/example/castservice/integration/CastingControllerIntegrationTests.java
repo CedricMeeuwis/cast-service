@@ -29,10 +29,10 @@ public class CastingControllerIntegrationTests {
     @Autowired
     private CastingRepository reviewRepository;
 
-    private Casting casting1 = new Casting("001", 1, 1, new Date("31/12/1998"), new Date("28/01/1999"));
-    private Casting casting2 = new Casting("002", 2, 1, new Date("28/12/1998"), new Date("26/01/1999"));
-    private Casting casting3 = new Casting("003", 2, 2, new Date("05/06/2005"), new Date("30/08/2005"));
-    private Casting castingToDelete = new Casting("999", 3, 3, new Date("01/01/2001"), new Date("02/01/2001"));
+    private Casting casting1 = new Casting("001", 1, 1, ("31/12/1998"), ("28/01/1999"));
+    private Casting casting2 = new Casting("002", 2, 1, ("28/12/1998"), ("26/01/1999"));
+    private Casting casting3 = new Casting("003", 2, 2, ("05/06/2005"), ("30/08/2005"));
+    private Casting castingToDelete = new Casting("999", 3, 3, ("01/01/2001"), ("02/01/2001"));
 
     @BeforeEach
     public void beforeAllTests() {
@@ -62,11 +62,11 @@ public class CastingControllerIntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].castMemberId", is(1)))
-                .andExpect(jsonPath("$[0].startDate", is(new Date("31/12/1998"))))
-                .andExpect(jsonPath("$[0].endDate", is(new Date("28/01/1999"))))
+                .andExpect(jsonPath("$[0].startDate", is(("31/12/1998").toString())))
+                .andExpect(jsonPath("$[0].endDate", is(("28/01/1999").toString())))
                 .andExpect(jsonPath("$[1].castMemberId", is(2)))
-                .andExpect(jsonPath("$[1].startDate", is(new Date("05/06/2005"))))
-                .andExpect(jsonPath("$[1].endDate", is(new Date("30/08/2005"))));
+                .andExpect(jsonPath("$[1].startDate", is(("28/12/1998").toString())))
+                .andExpect(jsonPath("$[1].endDate", is(("26/01/1999").toString())));
     }
 
     @Test
@@ -81,16 +81,16 @@ public class CastingControllerIntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].movieId", is(1)))
-                .andExpect(jsonPath("$[0].startDate", is(new Date("28/12/1998"))))
-                .andExpect(jsonPath("$[0].endDate", is(new Date("26/01/1999"))))
+                .andExpect(jsonPath("$[0].startDate", is(("28/12/1998").toString())))
+                .andExpect(jsonPath("$[0].endDate", is(("26/01/1999").toString())))
                 .andExpect(jsonPath("$[1].movieId", is(2)))
-                .andExpect(jsonPath("$[1].startDate", is(new Date("28/12/1998"))))
-                .andExpect(jsonPath("$[1].endDate", is(new Date("26/01/1999"))));
+                .andExpect(jsonPath("$[1].startDate", is(("05/06/2005").toString())))
+                .andExpect(jsonPath("$[1].endDate", is(("30/08/2005").toString())));
     }
 
     @Test
     public void whenPostCasting_thenReturnJsonCasting() throws Exception {
-        Casting casting4 = new Casting("004", 3, 4, new Date("20/09/2019"), new Date("30/09/2019"));
+        Casting casting4 = new Casting("004", 3, 4, ("20/09/2019"), ("30/09/2019"));
 
         mockMvc.perform(post("/casting")
                 .content(mapper.writeValueAsString(casting4))
@@ -99,14 +99,14 @@ public class CastingControllerIntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.castMemberId", is(3)))
                 .andExpect(jsonPath("$.movieId", is(4)))
-                .andExpect(jsonPath("$.startDate", is(new Date("20/09/2019"))))
-                .andExpect(jsonPath("$.endDate", is(new Date("30/09/2019"))));
+                .andExpect(jsonPath("$.startDate", is(("20/09/2019").toString())))
+                .andExpect(jsonPath("$.endDate", is(("30/09/2019").toString())));
     }
 
     @Test
     public void givenCasting_whenPutCasting_thenReturnJsonCasting() throws Exception {
 
-        Casting updatedCasting = new Casting("001", 1, 2, new Date("02/01/1999"), new Date("29/01/1999"));
+        Casting updatedCasting = new Casting("001", 1, 2, ("02/01/1999"), ("29/01/1999"));
 
         mockMvc.perform(put("/casting")
                 .content(mapper.writeValueAsString(updatedCasting))
@@ -115,8 +115,8 @@ public class CastingControllerIntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.castMemberId", is(1)))
                 .andExpect(jsonPath("$.movieId", is(2)))
-                .andExpect(jsonPath("$.startDate", is(new Date("02/01/1999"))))
-                .andExpect(jsonPath("$.endDate", is(new Date("29/01/1999"))));
+                .andExpect(jsonPath("$.startDate", is(("02/01/1999").toString())))
+                .andExpect(jsonPath("$.endDate", is(("29/01/1999").toString())));
     }
 
     @Test

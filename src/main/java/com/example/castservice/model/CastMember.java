@@ -12,7 +12,7 @@ public class CastMember {
     private String id;
     @Indexed(unique = true)
     private String name;
-    private Date birthDate;
+    private String birthDate;
     private String nationality;
 
     private Integer roleId;
@@ -20,7 +20,7 @@ public class CastMember {
     public CastMember() {
     }
 
-    public CastMember(String id, String name, Date birthDate, String nationality, Integer roleId) {
+    public CastMember(String id, String name, String birthDate, String nationality, Integer roleId) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
@@ -52,11 +52,11 @@ public class CastMember {
         this.name = name;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 
