@@ -35,7 +35,7 @@ public class CastMemberControllerUnitTests {
 
     @Test
     public void givenCastMember_whenGetCastMemberByName_thenReturnJsonCastMember() throws Exception {
-        CastMember castMember1 = new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", 1);
+        CastMember castMember1 = new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", "Directeur");
 
         given(castMemberRepository.findCastMemberByName("Kopperman")).willReturn(castMember1);
 
@@ -45,21 +45,21 @@ public class CastMemberControllerUnitTests {
                 .andExpect(jsonPath("$.name",is("Kopperman")))
                 .andExpect(jsonPath("$.birthDate",is(("11/11/2020"))))
                 .andExpect(jsonPath("$.nationality",is("Belgisch")))
-                .andExpect(jsonPath("$.roleId",is(1)));
+                .andExpect(jsonPath("$.role",is("Directeur")));
     }
 
     @Test
-    public void givenCastMember_whenGetCastMembersByRoleId_thenReturnJsonCastMembers() throws Exception {
-        CastMember castMember1 = new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", 1);
-        CastMember castMember2 = new CastMember("2","Jannes", ("11/01/2020"), "Nederlands", 1);
+    public void givenCastMember_whenGetCastMembersByRole_thenReturnJsonCastMembers() throws Exception {
+        CastMember castMember1 = new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", "Directeur");
+        CastMember castMember2 = new CastMember("2","Jannes", ("11/01/2020"), "Nederlands", "Directeur");
 
         List<CastMember> castMemberList = new ArrayList<>();
         castMemberList.add(castMember1);
         castMemberList.add(castMember2);
 
-        given(castMemberRepository.findCastMemberByRoleId(1)).willReturn(castMemberList);
+        given(castMemberRepository.findCastMemberByRole("Directeur")).willReturn(castMemberList);
 
-        mockMvc.perform(get("/castmember/role/{roleId}",1))
+        mockMvc.perform(get("/castmember/role/{role}","Directeur"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -73,8 +73,8 @@ public class CastMemberControllerUnitTests {
 
     @Test
     public void givenCastMember_whenGetCastMembersByNationality_thenReturnJsonCastMembers() throws Exception {
-        CastMember castMember1 = new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", 1);
-        CastMember castMember2 = new CastMember("2","Joske", ("19/09/1998"), "Belgisch", 2);
+        CastMember castMember1 = new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", "Directeur");
+        CastMember castMember2 = new CastMember("2","Joske", ("19/09/1998"), "Belgisch", "Acteur");
 
         List<CastMember> castMemberList = new ArrayList<>();
         castMemberList.add(castMember1);
@@ -88,15 +88,15 @@ public class CastMemberControllerUnitTests {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name",is("Kopperman")))
                 .andExpect(jsonPath("$[0].birthDate",is(("11/11/2020"))))
-                .andExpect(jsonPath("$[0].roleId",is(1)))
+                .andExpect(jsonPath("$[0].role",is("Directeur")))
                 .andExpect(jsonPath("$[1].name",is("Joske")))
                 .andExpect(jsonPath("$[1].birthDate",is(("19/09/1998"))))
-                .andExpect(jsonPath("$[1].roleId",is(2)));
+                .andExpect(jsonPath("$[1].role",is("Acteur")));
     }
 
     @Test
     public void whenPostCastMember_thenReturnJsonCastMember() throws Exception{
-        CastMember castMember3 = new CastMember("3","Bertje", ("12/01/1990"), "Belgisch", 3);
+        CastMember castMember3 = new CastMember("3","Bertje", ("12/01/1990"), "Belgisch", "Kuiser");
 
         mockMvc.perform(post("/castmember")
                 .content(mapper.writeValueAsString(castMember3))
@@ -106,16 +106,16 @@ public class CastMemberControllerUnitTests {
                 .andExpect(jsonPath("$.name",is("Bertje")))
                 .andExpect(jsonPath("$.birthDate",is(("12/01/1990"))))
                 .andExpect(jsonPath("$.nationality",is("Belgisch")))
-                .andExpect(jsonPath("$.roleId",is(3)));
+                .andExpect(jsonPath("$.role",is("Kuiser")));
     }
 
     @Test
     public void givenCastMember_whenPutCastMember_thenReturnJsonCastMember() throws Exception{
-        CastMember castMember1 = new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", 1);
+        CastMember castMember1 = new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", "Directeur");
 
         given(castMemberRepository.findCastMemberById("1")).willReturn(castMember1);
 
-        CastMember updatedCastMember = new CastMember("1","Kopperman", ("11/11/2020"), "Nederlands", 2);
+        CastMember updatedCastMember = new CastMember("1","Kopperman", ("11/11/2020"), "Nederlands", "Acteur");
 
         mockMvc.perform(put("/castmember")
                 .content(mapper.writeValueAsString(updatedCastMember))
@@ -125,12 +125,12 @@ public class CastMemberControllerUnitTests {
                 .andExpect(jsonPath("$.name",is("Kopperman")))
                 .andExpect(jsonPath("$.birthDate",is(("11/11/2020"))))
                 .andExpect(jsonPath("$.nationality",is("Nederlands")))
-                .andExpect(jsonPath("$.roleId",is(2)));
+                .andExpect(jsonPath("$.role",is("Acteur")));
     }
 
     @Test
     public void givenCastMember_whenDeleteCastMember_thenStatusOk() throws Exception{
-        CastMember castMemberToBeDeleted = new CastMember("999","Bob",("10/01/1991"), "Nederlands", 1);
+        CastMember castMemberToBeDeleted = new CastMember("999","Bob",("10/01/1991"), "Nederlands", "Directeur");
 
         given(castMemberRepository.findCastMemberById("999")).willReturn(castMemberToBeDeleted);
 

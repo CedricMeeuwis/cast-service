@@ -1,7 +1,6 @@
 package com.example.castservice.controller;
 
 import com.example.castservice.model.Casting;
-import com.example.castservice.model.Role;
 import com.example.castservice.repository.CastingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ public class CastingController {
         //value changes
         retrievedCasting.setEndDate(updatedCasting.getEndDate());
         retrievedCasting.setStartDate(updatedCasting.getStartDate());
-        retrievedCasting.setCastMemberId(updatedCasting.getCastMemberId());
+        retrievedCasting.setCastMember(updatedCasting.getCastMember());
         retrievedCasting.setMovieId(updatedCasting.getMovieId());
 
         castingRepository.save(retrievedCasting);
@@ -45,8 +44,8 @@ public class CastingController {
     public List<Casting> getCastingsByMovie(@PathVariable Integer movieId){
         return castingRepository.findCastingByMovieId(movieId);
     }
-    @GetMapping("/casting/castmember/{castMemberId}")
-    public List<Casting> getCastingsByCastMember(@PathVariable Integer castMemberId){
-        return castingRepository.findCastingByCastMemberId(castMemberId);
+    @GetMapping("/casting/castmember/{castMember}")
+    public List<Casting> getCastingsByCastMember(@PathVariable String castMember){
+        return castingRepository.findCastingByCastMember(castMember);
     }
 }

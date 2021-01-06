@@ -9,7 +9,7 @@ import java.util.Date;
 public class Casting {
     @Id
     private String id;
-    private Integer castMemberId;
+    private String castMember;
     private Integer movieId;
     private String startDate;
     private String endDate;
@@ -17,9 +17,9 @@ public class Casting {
     public Casting() {
     }
 
-    public Casting(String id, Integer castMemberId, Integer movieId, String startDate, String endDate) {
+    public Casting(String id, String castMember, Integer movieId, String startDate, String endDate) {
         this.id = id;
-        this.castMemberId = castMemberId;
+        this.castMember = castMember;
         this.movieId = movieId;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -33,12 +33,12 @@ public class Casting {
         this.id = id;
     }
 
-    public Integer getCastMemberId() {
-        return castMemberId;
+    public String getCastMember() {
+        return castMember;
     }
 
-    public void setCastMemberId(Integer castMemberId) {
-        this.castMemberId = castMemberId;
+    public void setCastMember(String castMember) {
+        this.castMember = castMember;
     }
 
     public Integer getMovieId() {

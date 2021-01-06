@@ -14,26 +14,25 @@ public class CastMember {
     private String name;
     private String birthDate;
     private String nationality;
-
-    private Integer roleId;
+    private String role;
 
     public CastMember() {
     }
 
-    public CastMember(String id, String name, String birthDate, String nationality, Integer roleId) {
+    public CastMember(String id, String name, String birthDate, String nationality, String role) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
         this.nationality = nationality;
-        this.roleId = roleId;
+        this.role = role;
     }
 
-    public Integer getRoleId() {
-        return roleId;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getId() {

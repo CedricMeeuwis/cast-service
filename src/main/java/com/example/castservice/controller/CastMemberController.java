@@ -13,9 +13,9 @@ public class CastMemberController {
     @Autowired
     private CastMemberRepository castMemberRepository;
 
-    @GetMapping("castmember/role/{roleId}")
-    public List<CastMember> getCastMembersByRole(@PathVariable Integer roleId){
-        return castMemberRepository.findCastMemberByRoleId(roleId);
+    @GetMapping("castmember/role/{role}")
+    public List<CastMember> getCastMembersByRole(@PathVariable String role){
+        return castMemberRepository.findCastMemberByRole(role);
     }
     @GetMapping("castmember/name/{name}")
     public CastMember getCastMemberByName(@PathVariable String name){
@@ -37,7 +37,7 @@ public class CastMemberController {
         retrievedCastMember.setName(updatedCastMember.getName());
         retrievedCastMember.setBirthDate(updatedCastMember.getBirthDate());
         retrievedCastMember.setNationality(updatedCastMember.getNationality());
-        retrievedCastMember.setRoleId(updatedCastMember.getRoleId());
+        retrievedCastMember.setRole(updatedCastMember.getRole());
 
         castMemberRepository.save(retrievedCastMember);
         return retrievedCastMember;

@@ -35,8 +35,8 @@ public class CastingControllerUnitTests {
 
     @Test
     public void givenCasting_whenGetCastingsByMovieId_thenReturnJsonCastings() throws Exception {
-        Casting casting1 = new Casting("1", 1, 1, ("10/10/2019"), ("10/10/2020"));
-        Casting casting2 = new Casting("2", 2, 1, ("10/10/2019"), ("08/11/2020"));
+        Casting casting1 = new Casting("1", "John", 1, ("10/10/2019"), ("10/10/2020"));
+        Casting casting2 = new Casting("2", "Joe", 1, ("10/10/2019"), ("08/11/2020"));
 
         List<Casting> castingList = new ArrayList<>();
         castingList.add(casting1);
@@ -48,26 +48,26 @@ public class CastingControllerUnitTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].castMemberId",is(1)))
+                .andExpect(jsonPath("$[0].castMember",is("John")))
                 .andExpect(jsonPath("$[0].startDate",is(("10/10/2019"))))
                 .andExpect(jsonPath("$[0].endDate",is(("10/10/2020"))))
-                .andExpect(jsonPath("$[1].castMemberId",is(2)))
+                .andExpect(jsonPath("$[1].castMember",is("Joe")))
                 .andExpect(jsonPath("$[1].startDate",is(("10/10/2019"))))
                 .andExpect(jsonPath("$[1].endDate",is(("08/11/2020"))));
     }
 
     @Test
-    public void givenCasting_whenGetCastingsByCastMemberId_thenReturnJsonCastings() throws Exception {
-        Casting casting1 = new Casting("1", 1, 1, ("10/10/2019"), ("10/10/2020"));
-        Casting casting2 = new Casting("2", 1, 2, ("11/10/2020"), ("12/12/2020"));
+    public void givenCasting_whenGetCastingsByCastMember_thenReturnJsonCastings() throws Exception {
+        Casting casting1 = new Casting("1", "John", 1, ("10/10/2019"), ("10/10/2020"));
+        Casting casting2 = new Casting("2", "John", 2, ("11/10/2020"), ("12/12/2020"));
 
         List<Casting> castingList = new ArrayList<>();
         castingList.add(casting1);
         castingList.add(casting2);
 
-        given(castingRepository.findCastingByCastMemberId(1)).willReturn(castingList);
+        given(castingRepository.findCastingByCastMember("John")).willReturn(castingList);
 
-        mockMvc.perform(get("/casting/castmember/{castMemberId}",1))
+        mockMvc.perform(get("/casting/castmember/{castMember}","John"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -81,14 +81,14 @@ public class CastingControllerUnitTests {
 
     @Test
     public void whenPostCasting_thenReturnJsonCasting() throws Exception{
-        Casting casting3 = new Casting("3", 2, 3, ("10/10/2019"), ("10/10/2020"));
+        Casting casting3 = new Casting("3", "Joe", 3, ("10/10/2019"), ("10/10/2020"));
 
         mockMvc.perform(post("/casting")
                 .content(mapper.writeValueAsString(casting3))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.castMemberId",is(2)))
+                .andExpect(jsonPath("$.castMember",is("Joe")))
                 .andExpect(jsonPath("$.movieId",is(3)))
                 .andExpect(jsonPath("$.startDate",is(("10/10/2019"))))
                 .andExpect(jsonPath("$.endDate",is(("10/10/2020"))));
@@ -96,18 +96,18 @@ public class CastingControllerUnitTests {
 
     @Test
     public void givenCasting_whenPutCasting_thenReturnJsonCasting() throws Exception{
-        Casting casting1 = new Casting("1", 1, 1, ("10/10/2019"), ("10/10/2020"));
+        Casting casting1 = new Casting("1", "John", 1, ("10/10/2019"), ("10/10/2020"));
 
         given(castingRepository.findCastingById("1")).willReturn(casting1);
 
-        Casting updatedCasting = new Casting("1", 1, 4, ("10/10/2018"), ("10/10/2019"));
+        Casting updatedCasting = new Casting("1", "John", 4, ("10/10/2018"), ("10/10/2019"));
 
         mockMvc.perform(put("/casting")
                 .content(mapper.writeValueAsString(updatedCasting))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.castMemberId",is(1)))
+                .andExpect(jsonPath("$.castMember",is("John")))
                 .andExpect(jsonPath("$.movieId",is(4)))
                 .andExpect(jsonPath("$.startDate",is(("10/10/2018"))))
                 .andExpect(jsonPath("$.endDate",is(("10/10/2019"))));
@@ -115,7 +115,7 @@ public class CastingControllerUnitTests {
 
     @Test
     public void givenCasting_whenDeleteCasting_thenStatusOk() throws Exception{
-        Casting castingToBeDeleted = new Casting("999",9,9, ("01/01/0001"), ("02/02/0002"));
+        Casting castingToBeDeleted = new Casting("999","Jo",9, ("01/01/0001"), ("02/02/0002"));
 
         given(castingRepository.findCastingById("999")).willReturn(castingToBeDeleted);
 

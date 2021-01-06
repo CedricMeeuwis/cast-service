@@ -10,5 +10,5 @@ import java.util.List;
 public interface CastingRepository extends MongoRepository<Casting, String>{
     Casting findCastingById(String id);
     List<Casting> findCastingByMovieId(Integer movieid);
-    List<Casting> findCastingByCastMemberId(Integer castmemberid);
+    List<Casting> findCastingByCastMember(String castmember);
 }

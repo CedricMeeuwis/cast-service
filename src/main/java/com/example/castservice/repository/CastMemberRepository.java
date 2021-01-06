@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface CastMemberRepository extends MongoRepository<CastMember, String>{
     CastMember findCastMemberById(String id);
-    List<CastMember> findCastMemberByRoleId(Integer roleid);
+    List<CastMember> findCastMemberByRole(String role);
     List<CastMember> findCastMemberByNationality(String nationality);
     CastMember findCastMemberByName(String name);
 }
