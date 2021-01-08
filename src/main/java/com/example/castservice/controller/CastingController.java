@@ -22,8 +22,6 @@ public class CastingController {
     public Casting updateCasting(@RequestBody Casting updatedCasting){
         Casting retrievedCasting = castingRepository.findCastingById(updatedCasting.getId());
         //value changes
-        retrievedCasting.setEndDate(updatedCasting.getEndDate());
-        retrievedCasting.setStartDate(updatedCasting.getStartDate());
         retrievedCasting.setCastMember(updatedCasting.getCastMember());
         retrievedCasting.setMovieId(updatedCasting.getMovieId());
 
