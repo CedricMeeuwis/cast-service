@@ -18,6 +18,9 @@ public class CastMemberController {
     public void fillDB() {
         if (castMemberRepository.count() == 0) {
             castMemberRepository.save(new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", "Directeur"));
+            castMemberRepository.save(new CastMember("2","John", ("01/11/1985"), "Nederlands", "Acteur"));
+            castMemberRepository.save(new CastMember("3","Joe", ("05/11/1990"), "Belgisch", "Kok"));
+            castMemberRepository.save(new CastMember("5","Bob", ("06/11/1962"), "Belgisch", "Stuntman"));
         }
     }
 
