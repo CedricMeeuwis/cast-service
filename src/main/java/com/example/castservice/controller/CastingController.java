@@ -6,12 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @RestController
 public class CastingController {
     @Autowired
     private CastingRepository castingRepository;
+
+    @PostConstruct
+    public void fillDB() {
+        if (castingRepository.count() == 0) {
+            castingRepository.save(new Casting("1", "John", 1));
+            castingRepository.save(new Casting("2", "Joe", 2));
+            castingRepository.save(new Casting("3", "Bob", 1));
+        }
+    }
 
     @PostMapping("/casting")
     public Casting addCasting(@RequestBody Casting casting){

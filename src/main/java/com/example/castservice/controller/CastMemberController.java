@@ -6,12 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @RestController
 public class CastMemberController {
     @Autowired
     private CastMemberRepository castMemberRepository;
+
+    @PostConstruct
+    public void fillDB() {
+        if (castMemberRepository.count() == 0) {
+            castMemberRepository.save(new CastMember("1","Kopperman", ("11/11/2020"), "Belgisch", "Directeur"));
+        }
+    }
 
     @GetMapping("castmember/role/{role}")
     public List<CastMember> getCastMembersByRole(@PathVariable String role){
